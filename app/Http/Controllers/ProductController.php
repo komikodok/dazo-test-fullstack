@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
 
 class ProductController extends Controller
@@ -17,99 +18,42 @@ class ProductController extends Controller
         ]);
     }
 
-    public function create()
-    {
-        $categories = Category::all();
+    public function create() {
         return Inertia::render('products/create', [
-            'categories' => $categories
         ]);
     }
 
-    public function store(Request $request)
+     public function store(Request $request)
     {
-        $data = $request->validate([
-            'name'         => 'required|string|max:255',
-            'sku'          => 'required|string|unique:products,sku',
-            'status'       => 'required|boolean',
-            'stock'        => 'required|integer|min:0',
-            'cost_price'   => 'required|numeric|min:0',
-            'sell_price'   => 'required|numeric|min:0',
-            'special_price'=> 'nullable|numeric|min:0',
-            'imageUrl'     => 'nullable|string',
-            'variants'     => 'nullable|string',
-            'type'         => 'required|string|in:simple,variant,bundle',
-            'category_id'  => 'required|string|max:255',
-            'createdAt'    => 'nullable|date',
+        $validator = Validator::make($request->all(), [
+            'name'          => 'required|string|max:255',
+            'sku'           => 'required|string|unique:products,sku',
+            'status'        => 'required|boolean',
+            'type'          => 'required|string|in:simple,variant,bundle',
+            
+            'category_id'   => 'required|string|exists:categories,_id',
+
+            'variants'      => 'nullable|array',
+            'variants.*.name'          => 'nullable|string|max:255',
+            'variants.*.capital_price' => 'nullable|numeric|min:0',
+            'variants.*.sell_price'    => 'nullable|numeric|min:0',
+            'variants.*.special_price' => 'nullable|numeric|min:0',
+            'variants.*.stock'         => 'nullable|integer|min:0',
+
+            'createdAt'     => 'nullable|date',
         ]);
 
-        Product::create([
-            'name'          => $data['name'],
-            'sku'           => $data['sku'],
-            'status'        => $data['status'],
-            'stock'         => $data['stock'],
-            'cost_price'    => $data['cost_price'],
-            'sell_price'    => $data['sell_price'],
-            'special_price' => $data['special_price'] ?? null,
-            'imageUrl'      => $data['imageUrl'] ?? null,
-            'variants'      => $data['variants'] ?? null,
-            'type'          => $data['type'] ?? 'simple',
-            'category_id'   => $data['category_id'],
-            'createdAt'     => $data['createdAt'] ?? now(),
-        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'errors' => $validator->errors()
+            ]);
+        }
+        
+        Product::create($validator->validated());
 
-        return redirect()->route('products.index')->with('success', 'Produk berhasil ditambahkan!');
-    }
-
-    public function show(string $id)
-    {
-        $product = Product::with('category')->findOrFail($id);
-        return Inertia::render('products/show', [
-            'product' => $product
-        ]);
-    }
-
-    public function edit(string $id)
-    {
-        $product    = Product::findOrFail($id);
-        $categories = Category::all();
-
-        return Inertia::render('products/edit', [
-            'product'    => $product,
-            'categories' => $categories
-        ]);
-    }
-
-    public function update(Request $request, string $id)
-    {
-        $product = Product::findOrFail($id);
-
-        $data = $request->validate([
-            'name'        => 'required|string|max:255',
-            'code'        => 'required|string|unique:products,code,' . $id . ',_id',
-            'imageUrl'    => 'nullable|string',
-            'variants'    => 'nullable|array',
-            'type'        => 'nullable|string',
-            'category_id' => 'required|string',
-            'price_min'   => 'required|numeric',
-            'price_max'   => 'required|numeric',
-            'status'      => 'required|string|in:active,inactive',
-        ]);
-
-        $product->update([
-            'name'        => $data['name'],
-            'code'        => $data['code'],
-            'imageUrl'    => $data['imageUrl'] ?? null,
-            'variants'    => $data['variants'] ?? [],
-            'type'        => $data['type'] ?? null,
-            'category_id' => $data['category_id'],
-            'price'       => [
-                'min' => $data['price_min'],
-                'max' => $data['price_max'],
-            ],
-            'status'      => $data['status'],
-        ]);
-
-        return redirect()->route('products.index')->with('success', 'Produk berhasil diupdate!');
+        return redirect()
+            ->route('products.index')
+            ->with('success', 'Produk berhasil ditambahkan!');
     }
 
     public function destroy(string $id)

@@ -15,77 +15,11 @@ import {
 import { EllipsisVertical, Trash, Repeat } from 'lucide-vue-next';
 import { onMounted } from 'vue';
 import gsap from 'gsap';
+import { IProduct } from '@/lib/types/product.type';
 
-// const { products } = defineProps(['products']);
+const { products } = defineProps<{ products: IProduct[] }>();
 
-// const productsData = products ?? []
-const products = [
-    {
-        product: {
-            name: "Sound Effect",
-            code: "SND-EFCT",
-            imageUrl: ""
-        },
-        variants: 1,
-        type: "Digital",
-        category: "Audio",
-        price: "Rp. 18.000 - Rp. 32.000",
-        createdAt: "27 Mei 2025",
-        status: "active"
-    },
-    {
-        product: {
-            name: "Sound Effect",
-            code: "SND-EFCT",
-            imageUrl: ""
-        },
-        variants: 1,
-        type: "Digital",
-        category: "Audio",
-        price: "Rp. 18.000 - Rp. 32.000",
-        createdAt: "27 Mei 2025",
-        status: "active"
-    },
-    {
-        product: {
-            name: "Sound Effect",
-            code: "SND-EFCT",
-            imageUrl: ""
-        },
-        variants: 1,
-        type: "Digital",
-        category: "Audio",
-        price: "Rp. 18.000 - Rp. 32.000",
-        createdAt: "27 Mei 2025",
-        status: "active"
-    },
-    {
-        product: {
-            name: "Sound Effect",
-            code: "SND-EFCT",
-            imageUrl: ""
-        },
-        variants: 1,
-        type: "Digital",
-        category: "Audio",
-        price: "Rp. 18.000 - Rp. 32.000",
-        createdAt: "27 Mei 2025",
-        status: "active"
-    },
-    {
-        product: {
-            name: "Sound Effect",
-            code: "SND-EFCT",
-            imageUrl: ""
-        },
-        variants: 1,
-        type: "Digital",
-        category: "Audio",
-        price: "Rp. 18.000 - Rp. 32.000",
-        createdAt: "27 Mei 2025",
-        status: "active"
-    },
-]
+const productsData = products ?? []
 
 onMounted(() => {
     const tl = gsap.timeline()
@@ -120,20 +54,20 @@ onMounted(() => {
             </TableRow>
         </TableHeader>
         <TableBody>
-            <TableRow v-for="product, index in products" :key="index" class="table-cell-group">
+            <TableRow v-for="product, index in productsData" :key="index" class="table-cell-group">
                 <TableCell class="text-md px-4 bg-slate-100 py-4 rounded-md flex gap-5 justify-center items-center">
                     <img src="/profile.png" class="w-14 h-14 p-1 bg-sky-200 rounded-md object-cover" alt="">
                     <div class="space-y-2">
-                        <p class="font-semibold text-sm">{{ product.product.name }}</p>
-                        <p class="text-sm">({{ product.product.code }})</p>
+                        <p class="font-semibold text-sm">{{ product.name }}</p>
+                        <p class="text-sm">({{ product.sku }})</p>
                     </div>
                 </TableCell>
                 <TableCell class="text-md p-4 bg-slate-100 rounded-md">{{ product.variants }}</TableCell>
                 <TableCell class="text-md p-4 bg-slate-100 rounded-md">{{ product.type }}</TableCell>
                 <TableCell class="text-md p-4 bg-slate-100 rounded-md">
-                    <h2 class="rounded-full p-1 bg-slate-200 flex justify-center items-center">{{ product.category }}</h2>
+                    <h2 class="rounded-full p-1 bg-slate-200 flex justify-center items-center">{{ product.category_id }}</h2>
                 </TableCell>
-                <TableCell class="text-md p-4 bg-slate-100 rounded-md">{{ product.price }}</TableCell>
+                <TableCell class="text-md p-4 bg-slate-100 rounded-md">Rp. {{ product.variants[0]?.capital_price }} - Rp. {{ product.variants[0]?.sell_price }}</TableCell>
                 <TableCell class="text-md p-4 bg-slate-100 rounded-md">{{ product.createdAt }}</TableCell>
                 <TableCell class="text-md p-4 bg-slate-100 rounded-md">{{ product.status }}</TableCell>
                 <TableCell class="text-md p-4 bg-slate-100 rounded-md">

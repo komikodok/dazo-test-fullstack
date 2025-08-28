@@ -2,9 +2,9 @@
 import AppLayout from '@/components/layout/AppLayout.vue';
 import ProductListHeader from '@/components/product/ProductListHeader.vue';
 import ProductTable from '@/components/product/ProductTable.vue';
-ProductListHeader
+import { IProduct } from '@/lib/types/product.type';
 
-// const { products } = defineProps(['products']);
+const { products } = defineProps<{ products: IProduct[] }>();
 </script>
 
 <template>
@@ -18,8 +18,7 @@ ProductListHeader
                 <ProductListHeader />
 
                 <div class="px-4">
-                    <!-- <ProductTable :products="products" /> -->
-                    <ProductTable />
+                    <ProductTable :products="products" />
                 </div>
 
                 <div class="px-4 flex justify-end">
