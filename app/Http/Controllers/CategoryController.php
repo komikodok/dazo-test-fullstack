@@ -8,9 +8,13 @@ use Illuminate\Support\Facades\Validator;
 
 class CategoryController extends Controller
 {
-    public function index() {
-        $categories = Category::all();
-        
+    public function index(Request $request) {
+        $categories = Category::query()
+            ->when($request->search, function ($q, $search) {
+                return $q->where('name', 'like', '%' . $search . '%');
+            })
+            ->get();
+
         return response()->json([
             'data' => $categories
         ]);
