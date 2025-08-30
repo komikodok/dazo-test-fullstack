@@ -12,7 +12,9 @@ class ProductController extends Controller
 {
     public function index()
     {
-        $products = Product::with('category')->get();
+        $products = Product::with('category')
+            ->paginate(5);
+            
         return Inertia::render('products/index', [
             'products' => $products
         ]);
@@ -40,7 +42,7 @@ class ProductController extends Controller
             'variants.*.special_price' => 'nullable|numeric|min:0',
             'variants.*.stock'         => 'nullable|integer|min:0',
 
-            'createdAt'     => 'nullable|date',
+            'created_at'     => 'nullable|date',
         ]);
 
         if ($validator->fails()) {
@@ -49,7 +51,20 @@ class ProductController extends Controller
             ]);
         }
         
-        Product::create($validator->validated());
+        $data = $validator->validate();
+        
+        $category = Category::where('name', $data['category']);
+
+        if (!$category) {
+            $category = Category::create([
+                'name' => $data['category']
+            ]);
+        }
+        
+        Product::create(array_merge([
+            $data,
+            'category_id' => $category->id
+        ]));
 
         return redirect()
             ->route('products.index')
