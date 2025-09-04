@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import AppLayout from '@/components/layout/AppLayout.vue';
-import ProductListHeader from '@/components/product/ProductListHeader.vue';
-import ProductTable from '@/components/product/ProductTable.vue';
-import { IProduct } from '@/lib/types/product.type';
+import ProductIndexHeader from '@/components/product/ProductIndexHeader.vue';
+import ProductDataTable from '@/components/product/ProductDataTable.vue';
+import ProductDataMobile from '@/components/product/ProductDataMobile.vue';
+import { IPaginatedProduct, IProduct } from '@/lib/types/product.type';
 
-const { products } = defineProps<{ products: IProduct[] }>();
+const { products } = defineProps<{ products: IPaginatedProduct<IProduct> }>();
+
 </script>
 
 <template>
@@ -15,10 +17,16 @@ const { products } = defineProps<{ products: IProduct[] }>();
             </div>
 
             <div class="w-full h-full bg-white rounded-lg">
-                <ProductListHeader />
+                <ProductIndexHeader />
 
                 <div class="px-4">
-                    <ProductTable :products="products" />
+                    <div class="max-md:hidden">
+                        <ProductDataTable :products="products" />
+                    </div>
+
+                    <div class="md:hidden">
+                        <ProductDataMobile :products="products" />
+                    </div>
                 </div>
 
                 <div class="px-4 flex justify-end">

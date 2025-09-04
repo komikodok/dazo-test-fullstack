@@ -9,6 +9,8 @@ import {
   BreadcrumbList,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
+import { route } from 'ziggy-js';
+
 </script>
 
 <template>
@@ -24,7 +26,7 @@ import {
                     </BreadcrumbItem>
                     <BreadcrumbSeparator />
                     <BreadcrumbItem>
-                        <BreadcrumbLink class="text-blue-800" href="/products/create">
+                        <BreadcrumbLink class="text-blue-800" :href="route('products.create')">
                             Tambah Produk
                         </BreadcrumbLink>
                     </BreadcrumbItem>
@@ -40,7 +42,7 @@ import {
                 </div>
 
                 <div class="px-6 py-4">
-                    <ProductForm />
+                    <ProductForm event="create-product"/>
                 </div>
             </div>
         </div>

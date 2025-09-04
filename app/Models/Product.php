@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use MongoDB\Laravel\Eloquent\Model;
+use MongoDB\Laravel\Relations\BelongsTo;
 
 class Product extends Model
 {
@@ -15,16 +16,17 @@ class Product extends Model
         'type',
         'category_id',
         'status',
-        'createdAt',
-        'variant',
+        'variants',
+        'created_at',
     ];
 
     protected $casts = [
         'status' => 'boolean',
-        'variant' => 'array',
+        'variants' => 'array',
     ];
 
-    function category(){
+    function category(): BelongsTo
+    {
         return $this->belongsTo(Category::class, 'category_id', '_id');
     }
     

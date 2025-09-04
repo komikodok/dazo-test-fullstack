@@ -34,7 +34,7 @@ function handleMouseLeave(e: MouseEvent) {
 </script>
 
 <template>
-    <NavigationMenu class="ml-auto hidden md:flex mr-6 p-2">
+    <NavigationMenu class="ml-auto flex md:mr-6 p-2">
         <NavigationMenuList class="space-x-3">
             <NavigationMenuItem class="cursor-pointer">
                 <div @mouseenter="handleMouseEnter" @mouseleave="handleMouseLeave" class="bg-blue-50 flex justify-center p-1 items-center gap-1 rounded-md">

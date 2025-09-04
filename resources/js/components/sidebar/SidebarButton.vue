@@ -33,7 +33,7 @@ function handleToggleSidebar(e: MouseEvent) {
 <template>
     <div 
         @click="handleToggleSidebar" 
-        class="cursor-pointer absolute left-52 top-0 w-10 h-10 flex justify-center items-center rounded-full bg-white transition-transform duration-500"
+        class="cursor-pointer absolute z-20 left-[12px] top-0 w-10 h-10 flex justify-center items-center rounded-full bg-white transition-transform duration-500"
     >
         <div class="border-[0.01px] border-gray-900/60 w-6 h-6 rounded-full flex justify-center items-center">
             <ChevronLeft 

@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "types": ["vitest/globals", "node"],
     "target": "ESNext",
     "useDefineForClassFields": true,
     "module": "ESNext",
@@ -21,5 +22,5 @@
     }
   },
   "include": ["resources/js/**/*.ts", "resources/js/**/*.vue"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules"],
 }

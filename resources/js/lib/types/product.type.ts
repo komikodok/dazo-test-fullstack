@@ -1,8 +1,4 @@
-import { z } from "zod"
-import { productSchema } from "../schemas/product.schema"
-
 export interface IVariants {
-    name?: string
     capital_price?: number
     sell_price?: number
     special_price?: number
@@ -10,17 +6,38 @@ export interface IVariants {
 }
 
 export interface ICategory {
-    _id: string
+    id: string
     name: string
 }
 
 export interface IProduct {
-    _id: string
+    id: string
     name: string
-    category_id: ICategory
+    category: ICategory
     sku: string
     status: boolean
     variants: IVariants[]
     type: string
-    createdAt: string
+    created_at: string
+    updated_at: string
+}
+
+export interface IPaginatedProduct<T> {
+  current_page: number
+  data: T[]
+  first_page_url: string
+  from: number | null
+  last_page: number
+  last_page_url: string
+  links: {
+    url: string | null
+    label: string
+    active: boolean
+  }[]
+  next_page_url: string | null
+  path: string
+  per_page: number
+  prev_page_url: string | null
+  to: number | null
+  total: number
 }

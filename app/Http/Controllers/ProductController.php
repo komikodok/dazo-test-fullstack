@@ -25,17 +25,16 @@ class ProductController extends Controller
         ]);
     }
 
-     public function store(Request $request)
+    public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'name'          => 'required|string|max:255',
-            'sku'           => 'required|string|unique:products,sku',
+            'sku'           => 'required|string|max:100',
             'status'        => 'required|boolean',
-            'type'          => 'required|string|in:simple,variant,bundle',
-            
-            'category_id'   => 'required|string|exists:categories,_id',
+            'type'          => 'required|string',
+            'category'      => 'required|string|max:255',
 
-            'variants'      => 'nullable|array',
+            'variants'               => 'nullable|array',
             'variants.*.name'          => 'nullable|string|max:255',
             'variants.*.capital_price' => 'nullable|numeric|min:0',
             'variants.*.sell_price'    => 'nullable|numeric|min:0',
@@ -53,7 +52,7 @@ class ProductController extends Controller
         
         $data = $validator->validate();
         
-        $category = Category::where('name', $data['category']);
+        $category = Category::where('name', $data['category'])->first();
 
         if (!$category) {
             $category = Category::create([
@@ -61,14 +60,72 @@ class ProductController extends Controller
             ]);
         }
         
-        Product::create(array_merge([
-            $data,
-            'category_id' => $category->id
-        ]));
+        try {
+            Product::create(array_merge(
+                $data,
+                ['category_id' => $category->_id]
+            ));
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage()
+            ]);
+        }
 
-        return redirect()
-            ->route('products.index')
-            ->with('success', 'Produk berhasil ditambahkan!');
+        return response()->json([
+            'message' => 'Produk berhasil ditambahkan'
+        ]);
+    }
+
+    public function update(Request $request, string $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'name'          => 'required|string|max:255',
+            'sku'           => 'required|string|max:100',
+            'status'        => 'required|boolean',
+            'type'          => 'required|string',
+            'category'      => 'required|string|max:255',
+
+            'variants'               => 'nullable|array',
+            'variants.*.name'          => 'nullable|string|max:255',
+            'variants.*.capital_price' => 'nullable|numeric|min:0',
+            'variants.*.sell_price'    => 'nullable|numeric|min:0',
+            'variants.*.special_price' => 'nullable|numeric|min:0',
+            'variants.*.stock'         => 'nullable|integer|min:0',
+
+            'updated_at'     => 'nullable|date',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'errors' => $validator->errors()
+            ]);
+        }
+        
+        $data = $validator->validate();
+        
+        $category = Category::where('name', $data['category'])->first();
+
+        if (!$category) {
+            $category = Category::create([
+                'name' => $data['category']
+            ]);
+        }
+        
+        try {
+            $product = Product::findOrFail($id);
+            $product->update(array_merge(
+                $data,
+                ['category_id' => $category->_id]
+            ));
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage()
+            ]);
+        }
+
+        return response()->json([
+            'message' => 'Produk berhasil diupdate'
+        ]);
     }
 
     public function destroy(string $id)
@@ -76,6 +133,8 @@ class ProductController extends Controller
         $product = Product::findOrFail($id);
         $product->delete();
 
-        return redirect()->route('products.index')->with('success', 'Produk berhasil dihapus!');
+        return response()->json([
+            'message' => 'Produk berhasil dihapus'
+        ], 200);
     }
 }

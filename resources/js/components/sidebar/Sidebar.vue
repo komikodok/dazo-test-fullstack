@@ -13,7 +13,7 @@ import {
 } from 'lucide-vue-next';
 import { ref } from 'vue';
 
-const openSidebar = ref<boolean>(true)
+const openSidebar = ref<boolean>(false)
 const openMenu = ref<boolean>(false)
 
 </script>
