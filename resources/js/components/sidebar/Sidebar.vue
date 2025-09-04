@@ -20,18 +20,18 @@ const openMenu = ref<boolean>(false)
 
 <template>
     <div 
-        class="relative flex-shrink-0 transition-all duration-700 space-y-1 h-full overflow-hidden bg-white shadow-[1px_0_10px_#cbd5e1]"
+        class="md:relative absolute z-10 flex-shrink-0 transition-all duration-700 space-y-1 h-full overflow-hidden bg-white shadow-[1px_0_10px_#cbd5e1]"
         :class="openSidebar ? 'translate-x-0 w-56' : '-translate-x-full w-0'"
     >
     
-    <header>
-        <h2 class="font-extrabold tracking-[-0.05em] flex items-center text-blue-950 text-4xl px-6 pt-1 pb-2">
-            dazo
-            <p class="text-3xl">.id</p>
-        </h2>
-    </header>
+        <header>
+            <h2 class="font-extrabold tracking-[-0.05em] flex items-center text-blue-950 text-4xl px-6 pt-1 pb-2">
+                dazo
+                <p class="text-3xl">.id</p>
+            </h2>
+        </header>
     
-    <main class="w-full h-full py-2 px-3">
+        <main class="w-full h-full py-2 px-3">
             <Popover>
                 <PopoverTrigger as-child class="w-full">
                     <Button 
