@@ -4,7 +4,7 @@
 
 ## Testing
 
-Klik [di sini](https://github.com/komikodok/dazo-test-fullstack/tree/main/tests) untuk melihat semua test.
+Klik [di sini](https://github.com/komikodok/dazo-test-fullstack/tree/main/resources/js/tests) untuk melihat unit test frontend.
 
 ## Response API
 
