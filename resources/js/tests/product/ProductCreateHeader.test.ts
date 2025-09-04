@@ -2,13 +2,11 @@ import { mount } from '@vue/test-utils'
 import { describe, it, expect, vi } from 'vitest'
 import ProductCreateHeader from '@/components/product/ProductCreateHeader.vue'
 
-// Stub Link dari Inertia supaya tidak error
 const LinkStub = {
   props: ['href'],
   template: '<a :href="href"><slot /></a>'
 }
 
-// Mock route dari Ziggy
 vi.mock('ziggy-js', () => ({
   route: (name: string) => `/mocked/${name.replace('.', '/')}`
 }))
