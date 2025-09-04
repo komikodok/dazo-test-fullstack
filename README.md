@@ -4,8 +4,8 @@
 
 ## Testing
 
-Klik [di sini](./resources/js/tests) untuk melihat semua test.
+Klik [di sini](https://github.com/komikodok/dazo-test-fullstack/tree/main/tests) untuk melihat semua test.
 
 ## Response API
 
-Klik [di sini](./app/Http/Controllers/README.md)
+Klik [di sini](https://github.com/komikodok/dazo-test-fullstack/blob/main/app/Http/Controllers/READMe.md)
